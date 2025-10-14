@@ -2,36 +2,48 @@ import java.io.BufferedReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Scanner;
 
 public class Ejercicio7 {
-    public static void main(String[] args) throws Exception{
-    try(BufferedReader br = Files.newBufferedReader(Path.of("D:\\ElenaGonzalez\\AD\\Ficheros\\alumnos.csv"),StandardCharsets.UTF_8)){
-        Scanner sc = new Scanner(System.in);
-        while(true){
-            System.out.println("Introduce nombre del alumno: ");
-            String nombre = sc.nextLine();
-            if (nombre.equals("Z")) {
-                break;
+    public static void main(String[] args) {
+        int contador = 0;
+        String mejorAlumno = "";
+        double mejorNota = -1;
+
+        Path ruta = Path.of("D:\\ElenaGonzalez\\AD\\Ficheros\\alumnos.csv");
+
+        try (BufferedReader br = Files.newBufferedReader(ruta, StandardCharsets.UTF_8)) {
+            String linea;
+
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(";");
+
+                // Verificar que haya suficientes columnas
+                if (datos.length < 5) continue;
+
+                String nombre = datos[0];
+                double nota1 = Double.parseDouble(datos[2]);
+                double nota2 = Double.parseDouble(datos[3]);
+                double nota3 = Double.parseDouble(datos[4]);
+
+                double notafinal = nota1 * 0.2 + nota2 * 0.3 + nota3 * 0.5;
+
+                if (notafinal >= 5) {
+                    contador++;
+                }
+
+                // Comprobar si es la mejor nota
+                if (notafinal > mejorNota) {
+                    mejorNota = notafinal;
+                    mejorAlumno = nombre;
+                }
             }
-            br.write(nombre);
-            br.write(";");
 
-            System.out.println("Introduce la fecha: ");
-            String fecha = sc.nextLine();
-            br.write(fecha);
-            for(int i = 1; i<=3;i++){
-                br.write(";");
-                System.out.println("Introduce la nota de la " + i + "ª evaluación: ");
-                String nota = sc.nextLine();
-                br.write(nota);
-            }
-            br.newLine();
+            // Mostrar resultados al final
+            System.out.println("Alumnos aprobados: " + contador);
+            System.out.println("Alumno con la mejor nota: " + mejorAlumno + " (" + mejorNota + ")");
+        } 
+        catch (Exception e) {
+            System.err.println("Error al leer el archivo: " + e.getMessage());
         }
-        } catch (Exception e){
-
-        }
-
     }
 }
-

@@ -18,5 +18,6 @@ public class Ejercicio1 {
 
     }
     System.out.println("Fin del programa");
+    
 }
 }

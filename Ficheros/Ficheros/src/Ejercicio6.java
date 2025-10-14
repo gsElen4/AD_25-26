@@ -20,6 +20,7 @@ public class Ejercicio6 {
             System.out.println("Introduce la fecha: ");
             String fecha = sc.nextLine();
             bw.write(fecha);
+
             for(int i = 1; i<=3;i++){
                 bw.write(";");
                 System.out.println("Introduce la nota de la " + i + "ª evaluación: ");
@@ -31,7 +32,7 @@ public class Ejercicio6 {
         } catch (Exception e){
 
         }
-
+        
     }
 }
 
