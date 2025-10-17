@@ -1,8 +1,13 @@
 public class Contacto {
     private String nombre;
-    private double salario;
-    private String puesto;
-    private int edad;
+    private String email;
+    private int tlf;
+
+
+
+    public static void Contacto(String nombre, String email, int tlf){
+
+    }
 
     public String getNombre(){
         return nombre;
@@ -11,30 +16,19 @@ public class Contacto {
     public void setNombre(String nombre){
         this.nombre = nombre;
     }
-
-     public double getSalario(){
-        return salario;
+    
+     public String getEmail(){
+        return email;
     }
 
-    public void setSalario(double salario){
-        this.salario = salario;
+     public int getTlf(){
+        return tlf;
     }
 
-     public String getPuesto(){
-        return puesto;
+    public void setTlf(int tlf){
+        this.tlf = tlf;
+    
     }
-
-    public void setPuesto(String puesto){
-        this.puesto = puesto;
-    }
-
-     public int getEdad(){
-        return edad;
-    }
-
-    public void setEdad(int edad){
-        this.edad = edad;
-    }
-
+       
 
 }
