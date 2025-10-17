@@ -5,7 +5,7 @@ public class App {
         Scanner sc = new Scanner(System.in);
         System.out.println("Introduce la cadena: ");
         String cadena = sc.nextLine();
-//Apartado a
+
         if(cadena.matches("\\d{4} ?[A-Z]{3}")){//Apartado A
             System.out.println("La cadena es una matricula");
         }
@@ -27,7 +27,7 @@ public class App {
             System.out.println("La cadena es un nombre de usuario");
         }
 
-        }
+}
 
 
         

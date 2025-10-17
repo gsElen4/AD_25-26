@@ -1,5 +1,3 @@
-import java.util.InputMismatchException;
-import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
@@ -60,7 +58,7 @@ catch ( ArrayIndexOutOfBoundsException e){
         media = 0;
 } 
     System.out.println("media: " + media);
-*/
+
     System.out.println("Ejercicio 3");
     System.out.println("=============");
     leerEntero(8,1);
@@ -89,11 +87,12 @@ catch ( ArrayIndexOutOfBoundsException e){
             }
         
         }   
-    
+    */
     }
     public static void CorreoElectronico(String email) throws EmailInvalidoException{
-        Scanner teclado = new Scanner(System.in);
-        int caracteres= email.length();
+       
+        
+        int caracteres= email.length();   
         if(caracteres<5){
             throw new EmailInvalidoException();
         }
@@ -105,7 +104,7 @@ catch ( ArrayIndexOutOfBoundsException e){
         if(!substring.contains(".")){
             throw new EmailInvalidoException();    
             }
-            return email.substring(0, posicion);
+            return;
         }
 
 }
