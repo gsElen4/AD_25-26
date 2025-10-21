@@ -89,7 +89,12 @@ public void Consultar(){
 }
 
 public void Modificar(){
-    
+    System.out.println("Escribe el nombre para modificar el contacto: ");
+    nombre = sc.nextLine();
+    Contacto contacto = new Contacto(nombre, email, tlf);
+    if(! agenda.contains(contacto)){
+        System.out.println("El contacto a modificar no existe");
+    }
 }
 
 public void Borrar(){
