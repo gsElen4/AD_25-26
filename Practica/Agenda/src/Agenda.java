@@ -1,6 +1,7 @@
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Agenda {
-    private ArrayList<Contacto> agenda;
+     ArrayList<Contacto> agenda;
 
 public Agenda(){
     agenda = new ArrayList<Contacto>();
@@ -20,28 +21,31 @@ String nombre;
 String email;
 int tlf;
 
-public void Crear(){
+public void Crear() throws IOException{
     String decision;
-    System.out.println("Quieres un archivo VACIO o con CONTACTOS: ");
-    decision = sc.nextLine();
-
-    try(BufferedWriter bw = Files.newBufferedWriter(Path.of("D:\\ElenaGonzalez\\AD\\Practica\\Archivo.txt"),StandardCharsets.UTF_8)){
-        if(decision.equals("vacio")){ //si escoge vacio -> fichero vacio
-            agenda.removeAll(agenda);
-            System.out.println("Se ha creado el fichero");
-        } else if(decision.equals("contactos")){ //si escoge vacio -> fichero con contactos
-            agenda.removeAll(agenda);
-
-            agenda.add(new Contacto("Clara", "claraMS@gmail.com", 659873201));
-            agenda.add(new Contacto("Lucas", "Lucas456@gmail.com", 668597421));
-            agenda.add(new Contacto("Ana", "ana4@gmail.com", 669234598));
-            agenda.add(new Contacto("Manuel", "ManuelRD@gmail.com", 675456526));
-        
-        System.out.println("Se ha creado el fichero");
+     try{
+        System.out.println("Quieres un archivo VACIO o con CONTACTOS: ");
+        decision = sc.nextLine();
     
-            System.out.println("No es una opción válida");
-            Crear(); //hace recursivo   
+            if(decision.equals("vacio")){ //si escoge vacio -> fichero vacio
+                BufferedWriter bw = Files.newBufferedWriter(Path.of("D:\\ElenaGonzalez\\AD\\Practica\\ArchivoSinCOntactos.txt"));
+                agenda.removeAll(agenda);
+                System.out.println("Se ha creado el fichero");
+           
+            } else {
+                if(decision.equals("contactos")){ //si escoge vacio -> fichero con contactos
+                   BufferedWriter bw = Files.newBufferedWriter(Path.of("D:\\ElenaGonzalez\\AD\\Practica\\ArchivoConContactos.txt"));
+
+                agenda.removeAll(agenda);
+
+                agenda.add(new Contacto("Clara", "claraMS@gmail.com", 659873201));
+                agenda.add(new Contacto("Lucas", "Lucas456@gmail.com", 668597421));
+                agenda.add(new Contacto("Ana", "ana4@gmail.com", 669234598));
+                agenda.add(new Contacto("Manuel", "ManuelRD@gmail.com", 675456526));
+            
+            System.out.println("Se ha creado el fichero");
         }
+    }
     }catch (Exception e){
         e.printStackTrace();
         System.out.println("No es una opción válida");
@@ -55,13 +59,13 @@ public void Anhadir(){
     String tlfN;
     try (BufferedReader br = Files.newBufferedReader(Path.of("D:\\ElenaGonzalez\\AD\\Practica\\Archivo.txt"),StandardCharsets.UTF_8)){
         System.out.println("Nombre: ");
-        nombreN = sc.nextLine();
+          nombreN = sc.nextLine();
 
         System.out.println("Correo electrónico: ");
-        emailN = sc.nextLine();
+         emailN = sc.nextLine();
 
-    System.out.println("Número de telefono: ");
-    tlfN = sc.nextLine();
+        System.out.println("Número de telefono: ");
+             tlfN = sc.nextLine();
 
     for(Contacto c : agenda){
         if(c.getNombre().equalsIgnoreCase(nombre)){
@@ -84,6 +88,11 @@ public void Consultar(){
     System.out.println("La agenda está vacia");
  }
  else{
+    System.out.println("Que contacto quieres consultar: ");
+    nombre = sc.nextLine();
+        if(agenda.contains(nombre)){
+            System.out.println(nombre + " " + email + " " + tlf);
+        }
     
  }
 }
@@ -98,7 +107,12 @@ public void Modificar(){
 }
 
 public void Borrar(){
-}
+    System.out.println("Qué contacto quieres borrar: ");
+    nombre= sc.nextLine();
+
+   
+    }
+
 
 public void Restaurar(){
 
@@ -121,29 +135,37 @@ public void MasOpciones(){
 
     switch (opcion2) {
         case 1: 
-                System.out.println("Ubicación: ");
-                 String ubi = ruta;
-                System.out.println("Tamaño del archivo: ");
-                int tamanho = ruta.length();
-                System.out.println("Permisos del archivo: ");
-                
-                System.out.println("Fecha y hora de la última del archivo: ");
-            break;
+                Path path = Path.of(ruta);
+                System.out.println("Ubicación: " + path.toAbsolutePath());
+                System.out.println("Tamaño del archivo: " + path.toFile().length() + " bytes");
+                System.out.println("Permisos: " + (path.toFile().canRead() ? "lectura " : "") +
+                                                  (path.toFile().canWrite() ? "escritura " : "") +
+                                                  (path.toFile().canExecute() ? "ejecución" : ""));
+                System.out.println("Última modificación: " + path.toFile().lastModified());
+                break;
         case 2:
             agenda.clone();
+            System.out.println("Copia de seguridad realizada correctamente");
             break;
         case 3:
-
-            break;
-        case 4:
             
             break;
+        case 4:
+            System.out.println("Saliendo del Menú 2...");
+            System.out.println();
+           
+            break;
         default:
-            throw new AssertionError();
+               agenda.Menu2();
     }
 }
 
-    public static void Menu(){
+public void Salir(){
+    System.out.println("Saliendo...");
+    
+}
+
+    public void Menu1(){
         System.out.println("    M E N U    ");
         System.out.println("=================");
         System.out.println("1. Crear agenda");
@@ -160,7 +182,7 @@ public void MasOpciones(){
     
     }
 
-    public static void Menu2(){
+    public void Menu2(){
          System.out.println("    M E N U 2    ");
         System.out.println("===================");
         System.out.println("1. Informarcion del archvio");
@@ -173,7 +195,7 @@ public void MasOpciones(){
 
     public int DameOpcion(){
         int opcion = 0;
-        Menu();
+        Menu1();
         opcion = sc.nextInt();
         return opcion;
     }
