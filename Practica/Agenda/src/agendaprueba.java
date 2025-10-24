@@ -15,9 +15,6 @@ public class agendaprueba {
         agenda = new ArrayList<>();
     }
 
-    // -----------------------------
-    // MÉTODO CREAR
-    // -----------------------------
     public void Crear() throws IOException {
         System.out.println("¿Quieres un archivo VACIO o con CONTACTOS?");
         String decision = sc.nextLine().trim().toLowerCase();
@@ -29,7 +26,7 @@ public class agendaprueba {
                     // Creamos archivo vacío
                 }
                 agenda.clear();
-                System.out.println("✅ Se ha creado el fichero vacío.");
+                System.out.println("Se ha creado el fichero vacío.");
 
             } else if (decision.equals("contactos")) {
                 Path ruta = Path.of("D:\\ElenaGonzalez\\AD\\Practica\\ArchivoConContactos.txt");
@@ -45,19 +42,17 @@ public class agendaprueba {
                         bw.newLine();
                     }
                 }
-                System.out.println("✅ Se ha creado el fichero con contactos.");
+                System.out.println("Se ha creado el fichero con contactos.");
             } else {
-                System.out.println("❌ Opción no válida. Escribe 'vacio' o 'contactos'.");
+                System.out.println("Opción no válida. Escribe 'vacio' o 'contactos'.");
                 Crear(); // vuelve a preguntar
             }
         } catch (Exception e) {
-            System.out.println("❌ Error al crear el archivo: " + e.getMessage());
+            System.out.println("Error al crear el archivo: " + e.getMessage());
         }
     }
 
-    // -----------------------------
-    // MÉTODO AÑADIR
-    // -----------------------------
+    
     public void Anhadir() {
         try {
             sc.nextLine(); // limpiar buffer si viene de un nextInt()
@@ -72,25 +67,22 @@ public class agendaprueba {
 
             for (Contacto c : agenda) {
                 if (c.getNombre().equalsIgnoreCase(nombreN)) {
-                    System.out.println("⚠️ Este contacto ya existe.");
+                    System.out.println("Este contacto ya existe.");
                     return;
                 }
             }
 
             agenda.add(new Contacto(nombreN, emailN, tlfN));
-            System.out.println("✅ Contacto añadido con éxito.");
+            System.out.println("Contacto añadido con éxito.");
 
         } catch (Exception e) {
-            System.out.println("❌ Error al añadir contacto: " + e.getMessage());
+            System.out.println("Error al añadir contacto: " + e.getMessage());
         }
     }
 
-    // -----------------------------
-    // MÉTODO CONSULTAR
-    // -----------------------------
     public void Consultar() {
         if (agenda.isEmpty()) {
-            System.out.println("📭 La agenda está vacía.");
+            System.out.println("La agenda está vacía.");
             return;
         }
 
@@ -100,20 +92,18 @@ public class agendaprueba {
         boolean encontrado = false;
         for (Contacto c : agenda) {
             if (c.getNombre().equalsIgnoreCase(nombreBuscado)) {
-                System.out.println("📇 " + c);
+                System.out.println(c);
                 encontrado = true;
                 break;
             }
         }
 
         if (!encontrado) {
-            System.out.println("❌ Contacto no encontrado.");
+            System.out.println("Contacto no encontrado.");
         }
     }
 
-    // -----------------------------
-    // MÉTODO MODIFICAR
-    // -----------------------------
+
     public void Modificar() {
         if (agenda.isEmpty()) {
             System.out.println("La agenda está vacía.");
@@ -131,16 +121,13 @@ public class agendaprueba {
                 System.out.println("Nuevo teléfono: ");
                 c.setTlf(Integer.parseInt(sc.nextLine()));
 
-                System.out.println("✅ Contacto modificado.");
+                System.out.println("Contacto modificado.");
                 return;
             }
         }
-        System.out.println("❌ No se ha encontrado el contacto.");
+        System.out.println("No se ha encontrado el contacto.");
     }
 
-    // -----------------------------
-    // MÉTODO BORRAR
-    // -----------------------------
     public void Borrar() {
         if (agenda.isEmpty()) {
             System.out.println("La agenda está vacía.");
@@ -151,42 +138,30 @@ public class agendaprueba {
         String nombreBorrar = sc.nextLine();
 
         agenda.removeIf(c -> c.getNombre().equalsIgnoreCase(nombreBorrar));
-        System.out.println("✅ Contacto eliminado (si existía).");
+        System.out.println("Contacto eliminado (si existía).");
     }
 
-    // -----------------------------
-    // MÉTODO RESTAURAR (pendiente de implementar)
-    // -----------------------------
     public void Restaurar() {
-        System.out.println("⚙️ Función 'Restaurar' aún no implementada.");
+        System.out.println("Función 'Restaurar' aún no implementada.");
     }
 
-    // -----------------------------
-    // MÉTODO VER
-    // -----------------------------
     public void Ver() {
         if (agenda.isEmpty()) {
             System.out.println("📭 La agenda está vacía.");
             return;
         }
 
-        System.out.println("📋 CONTACTOS EN LA AGENDA:");
+        System.out.println("ALUMNOS EN LA AGENDA:");
         for (Contacto c : agenda) {
             System.out.println(c);
         }
     }
 
-    // -----------------------------
-    // MÉTODO VACIAR
-    // -----------------------------
     public void Vaciar() {
         agenda.clear();
-        System.out.println("✅ La agenda se ha vaciado.");
+        System.out.println("La agenda se ha vaciado.");
     }
 
-    // -----------------------------
-    // MÉTODO MÁS OPCIONES
-    // -----------------------------
     public void MasOpciones() {
         int opcion2 = DameOpcion2();
         String ruta = "D:\\ElenaGonzalez\\AD\\Practica\\Archivo.txt";
@@ -203,11 +178,11 @@ public class agendaprueba {
                 break;
 
             case 2:
-                System.out.println("⚙️ Copia de seguridad pendiente de implementar.");
+                System.out.println(" Copia de seguridad pendiente de implementar.");
                 break;
 
             case 3:
-                System.out.println("⚙️ Restaurar copia pendiente de implementar.");
+                System.out.println(" Restaurar copia pendiente de implementar.");
                 break;
 
             case 4:
@@ -215,14 +190,11 @@ public class agendaprueba {
                 break;
 
             default:
-                System.out.println("❌ Opción no válida.");
+                System.out.println(" Opción no válida.");
                 break;
         }
     }
 
-    // -----------------------------
-    // MENÚS Y MÉTODOS AUXILIARES
-    // -----------------------------
     public void Menu1() {
         System.out.println("\n    M E N Ú  P R I N C I P A L");
         System.out.println("================================");
@@ -264,7 +236,7 @@ public class agendaprueba {
     }
 
     public void Salir() {
-        System.out.println("👋 Saliendo del programa...");
+        System.out.println("Saliendo...");
     }
 }
 

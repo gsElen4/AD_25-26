@@ -21,77 +21,91 @@ String nombre;
 String email;
 int tlf;
 
-public void Crear() throws IOException{
-    String decision;
-     try{
-        System.out.println("Quieres un archivo VACIO o con CONTACTOS: ");
-        decision = sc.nextLine();
-    
-            if(decision.equals("vacio")){ //si escoge vacio -> fichero vacio
-                BufferedWriter bw = Files.newBufferedWriter(Path.of("D:\\ElenaGonzalez\\AD\\Practica\\ArchivoSinCOntactos.txt"));
-                agenda.removeAll(agenda);
-                System.out.println("Se ha creado el fichero");
-           
+ public void Crear() throws IOException {
+        System.out.println("¿Quieres un archivo VACIO o con CONTACTOS?");
+        String decision = sc.nextLine().trim().toLowerCase();
+
+        try {
+            if (decision.equals("vacio")) {
+                Path ruta = Path.of("D:\\ElenaGonzalez\\AD\\Practica\\ArchivoSinContactos.txt");
+                try (BufferedWriter bw = Files.newBufferedWriter(ruta, StandardCharsets.UTF_8)) {
+                    // Creamos archivo vacío
+                }
+                agenda.clear();
+                System.out.println("Se ha creado el fichero vacío.");
+
+            } else if (decision.equals("contactos")) {
+                Path ruta = Path.of("D:\\ElenaGonzalez\\AD\\Practica\\ArchivoConContactos.txt");
+                try (BufferedWriter bw = Files.newBufferedWriter(ruta, StandardCharsets.UTF_8)) {
+                    agenda.clear();
+                    agenda.add(new Contacto("Clara", "claraMS@gmail.com", 659873201));
+                    agenda.add(new Contacto("Lucas", "Lucas456@gmail.com", 668597421));
+                    agenda.add(new Contacto("Ana", "ana4@gmail.com", 669234598));
+                    agenda.add(new Contacto("Manuel", "ManuelRD@gmail.com", 675456526));
+
+                    for (Contacto c : agenda) {
+                        bw.write(c.getNombre() + "," + c.getEmail() + "," + c.getTlf());
+                        bw.newLine();
+                    }
+                }
+                System.out.println("Se ha creado el fichero con contactos.");
             } else {
-                if(decision.equals("contactos")){ //si escoge vacio -> fichero con contactos
-                   BufferedWriter bw = Files.newBufferedWriter(Path.of("D:\\ElenaGonzalez\\AD\\Practica\\ArchivoConContactos.txt"));
-
-                agenda.removeAll(agenda);
-
-                agenda.add(new Contacto("Clara", "claraMS@gmail.com", 659873201));
-                agenda.add(new Contacto("Lucas", "Lucas456@gmail.com", 668597421));
-                agenda.add(new Contacto("Ana", "ana4@gmail.com", 669234598));
-                agenda.add(new Contacto("Manuel", "ManuelRD@gmail.com", 675456526));
-            
-            System.out.println("Se ha creado el fichero");
+                System.out.println("Opción no válida. Escribe 'vacio' o 'contactos'.");
+                Crear(); // vuelve a preguntar
+            }
+        } catch (Exception e) {
+            System.out.println("Error al crear el archivo: " + e.getMessage());
         }
     }
-    }catch (Exception e){
-        e.printStackTrace();
-        System.out.println("No es una opción válida");
-        Crear(); //hace recursivo
-}
+
     
-}
+
 public void Anhadir(){
-    String nombreN;
-    String emailN;
-    String tlfN;
-    try (BufferedReader br = Files.newBufferedReader(Path.of("D:\\ElenaGonzalez\\AD\\Practica\\Archivo.txt"),StandardCharsets.UTF_8)){
+   try {
         System.out.println("Nombre: ");
-          nombreN = sc.nextLine();
+         String nombreN = sc.nextLine();
 
         System.out.println("Correo electrónico: ");
-         emailN = sc.nextLine();
+         String emailN = sc.nextLine();
 
-        System.out.println("Número de telefono: ");
-             tlfN = sc.nextLine();
+        System.out.println("Númemro de telefono: ");
+        int tlfN = Integer.parseInt(sc.nextLine());
 
-    for(Contacto c : agenda){
-        if(c.getNombre().equalsIgnoreCase(nombre)){
-                System.out.println("Este contacto ya existe en el archivo");
+        for(Contacto c: agenda){
+            if(c.getNombre().equalsIgnoreCase(nombreN)){
+                System.out.println("Este contacto ya existe");
                 return;
-            
-        } else{
-         agenda.add(new Contacto(nombre, email, tlf));
-         System.out.println("Archivo añadido");
-    }
-}
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
+            }
+        }
+        agenda.add(new Contacto(nombreN, emailN, tlfN));
+            System.out.println("Contacto añadido");
+
+   } catch (Exception e) {
+        System.out.println("Error al añadir contacto: " + e.getMessage());
+
+   }
     
 }
 
 public void Consultar(){
  if(agenda.isEmpty()){
     System.out.println("La agenda está vacia");
+    return;
  }
  else{
     System.out.println("Que contacto quieres consultar: ");
-    nombre = sc.nextLine();
-        if(agenda.contains(nombre)){
-            System.out.println(nombre + " " + email + " " + tlf);
+    String consulta = sc.nextLine();
+    boolean encontrado ;
+        if(agenda.contains(consulta)){
+            for (Contacto c : agenda) {
+                 if (c.getNombre().equalsIgnoreCase(consulta)) {
+                System.out.println(c);
+                encontrado = true;
+                break;
+            }
+            }
+
+           
         }
     
  }
@@ -156,7 +170,7 @@ public void MasOpciones(){
            
             break;
         default:
-               agenda.Menu2();
+              
     }
 }
 
@@ -193,18 +207,19 @@ public void Salir(){
 
     }
 
-    public int DameOpcion(){
-        int opcion = 0;
+    public int DameOpcion() {
         Menu1();
-        opcion = sc.nextInt();
+        int opcion = sc.nextInt();
+        sc.nextLine(); // limpiar buffer
         return opcion;
     }
-    
-    public int DameOpcion2(){
-        int opcion2= 0;
+
+    public int DameOpcion2() {
         Menu2();
-        opcion2 = sc.nextInt();
+        int opcion2 = sc.nextInt();
+        sc.nextLine();
         return opcion2;
     }
 }
+
 
