@@ -20,6 +20,7 @@ Scanner sc = new Scanner(System.in);
 String nombre;
 String email;
 int tlf;
+Contacto contacto = new Contacto(nombre, email, tlf);
 
  public void Crear() throws IOException {
         System.out.println("¿Quieres un archivo VACIO o con CONTACTOS?");
@@ -104,17 +105,14 @@ public void Consultar(){
                 break;
             }
             }
-
-           
         }
-    
  }
 }
 
 public void Modificar(){
     System.out.println("Escribe el nombre para modificar el contacto: ");
     nombre = sc.nextLine();
-    Contacto contacto = new Contacto(nombre, email, tlf);
+    
     if(! agenda.contains(contacto)){
         System.out.println("El contacto a modificar no existe");
     }
@@ -123,8 +121,13 @@ public void Modificar(){
 public void Borrar(){
     System.out.println("Qué contacto quieres borrar: ");
     nombre= sc.nextLine();
+    if(agenda.contains(contacto)){
 
-   
+
+        System.out.println("Contacto eliminado");
+    } else {
+        System.out.println("El contacto no se encuentra en la agenda");
+    }
     }
 
 
@@ -133,8 +136,14 @@ public void Restaurar(){
 }
 
 public void Ver(){
-    String nombre;
-    
+    int contador = 0;
+    if(! agenda.contains(contacto)){
+        System.out.println("El contacto no está en la agenda");
+    } else {
+        System.out.println(agenda);
+        contador++;
+    }
+    System.out.println("La agenda contiene " + contador + "contactos.");
 }
 
 public void Vaciar(){
@@ -158,7 +167,6 @@ public void MasOpciones(){
                 System.out.println("Última modificación: " + path.toFile().lastModified());
                 break;
         case 2:
-            agenda.clone();
             System.out.println("Copia de seguridad realizada correctamente");
             break;
         case 3:
