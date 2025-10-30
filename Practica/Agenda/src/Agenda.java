@@ -123,12 +123,12 @@ public void Borrar(){
     nombre= sc.nextLine();
     if(agenda.contains(contacto)){
 
-
+        
         System.out.println("Contacto eliminado");
     } else {
         System.out.println("El contacto no se encuentra en la agenda");
     }
-    }
+}
 
 
 public void Restaurar(){
@@ -218,7 +218,7 @@ public void Salir(){
     public int DameOpcion() {
         Menu1();
         int opcion = sc.nextInt();
-        sc.nextLine(); // limpiar buffer
+        sc.nextLine(); 
         return opcion;
     }
 
@@ -228,6 +228,17 @@ public void Salir(){
         sc.nextLine();
         return opcion2;
     }
+
+
+    public Contacto buscarPorNombre(String nombre) {
+        for (Contacto c : agenda) {
+            if (c.getNombre().equalsIgnoreCase(nombre)) {
+                return c;
+            }
+        }
+        return null;
+    }
+
 }
 
 

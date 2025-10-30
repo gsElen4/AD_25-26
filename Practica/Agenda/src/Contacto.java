@@ -5,13 +5,18 @@ public class Contacto implements Serializable {
     private String nombre;
     private String email;
     private int tlf;
+    private boolean borrado;
 
 
     public Contacto(String nombre, String email, int tlf){
         this.nombre = nombre;
         this.email = email;
         this.tlf = tlf;
+       
     }
+   
+
+   
 
     public String getNombre(){
         return nombre;
@@ -38,5 +43,4 @@ public class Contacto implements Serializable {
     
     }
        
-
 }
