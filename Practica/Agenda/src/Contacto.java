@@ -12,11 +12,9 @@ public class Contacto implements Serializable {
         this.nombre = nombre;
         this.email = email;
         this.tlf = tlf;
+        this.borrado= false;
        
     }
-   
-
-   
 
     public String getNombre(){
         return nombre;
@@ -42,5 +40,11 @@ public class Contacto implements Serializable {
         this.tlf = tlf;
     
     }
-       
+     public boolean isBorrado(){
+        return borrado;
+    }
+    public void setBorrado(boolean borrado) {
+      this.borrado = borrado;
+    }     
+   
 }

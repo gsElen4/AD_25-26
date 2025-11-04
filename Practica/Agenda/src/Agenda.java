@@ -68,6 +68,10 @@ public void Anhadir(){
 
         System.out.println("Correo electrónico: ");
          String emailN = sc.nextLine();
+          if (!email.matches("^[\\w.-]+@[\\w.-]+\\.[A-Za-z]{2,6}$")) {
+                System.out.println("Formato de email no válido.");
+                return;
+            }
 
         System.out.println("Númemro de telefono: ");
         int tlfN = Integer.parseInt(sc.nextLine());
