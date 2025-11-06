@@ -1,199 +1,278 @@
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.Scanner;
-
+import java.nio.file.*;
+import java.text.SimpleDateFormat;
+import java.util.*;
 public class Agenda {
-     ArrayList<Contacto> agenda;
+    private ArrayList<Contacto> agenda;
+    private  Path archivo = Path.of("D:\\ElenaGonzalez\\AD\\Practica\\Agenda.txt");
+    Scanner sc = new Scanner(System.in);
 
-public Agenda(){
-    agenda = new ArrayList<Contacto>();
-}
+    public Agenda() {
+        agenda = new ArrayList<>();
+        cargarAgenda();
+    }
 
-Scanner sc = new Scanner(System.in);
-//variables
-String nombre;
-String email;
-int tlf;
-Contacto contacto = new Contacto(nombre, email, tlf);
 
- public void Crear() throws IOException {
-        System.out.println("¿Quieres un archivo VACIO o con CONTACTOS?");
-        String decision = sc.nextLine().trim().toLowerCase();
-
+    // Crear agenda (vacía o con contactos)
+    public void Crear() {
         try {
+            System.out.println("¿Quieres un archivo VACIO o con CONTACTOS?");
+            String decision = sc.nextLine().trim().toLowerCase();
+
             if (decision.equals("vacio")) {
-                Path ruta = Path.of("D:\\ElenaGonzalez\\AD\\Practica\\ArchivoSinContactos.txt");
-                try (BufferedWriter bw = Files.newBufferedWriter(ruta, StandardCharsets.UTF_8)) {
-                    // Creamos archivo vacío
-                }
                 agenda.clear();
-                System.out.println("Se ha creado el fichero vacío.");
-
+                guardarAgenda();
+                System.out.println("Archivo vacío creado ");
             } else if (decision.equals("contactos")) {
-                Path ruta = Path.of("D:\\ElenaGonzalez\\AD\\Practica\\ArchivoConContactos.txt");
-                try (BufferedWriter bw = Files.newBufferedWriter(ruta, StandardCharsets.UTF_8)) {
-                    agenda.clear();
-                    agenda.add(new Contacto("Clara", "claraMS@gmail.com", 659873201));
-                    agenda.add(new Contacto("Lucas", "Lucas456@gmail.com", 668597421));
-                    agenda.add(new Contacto("Ana", "ana4@gmail.com", 669234598));
-                    agenda.add(new Contacto("Manuel", "ManuelRD@gmail.com", 675456526));
+                agenda.clear();
+                agenda.add(new Contacto("Clara", "claraMS@gmail.com", 659873201));
+                agenda.add(new Contacto("Lucas", "lucas456@gmail.com", 668597421));
+                agenda.add(new Contacto("Ana", "ana4@gmail.com", 669234598));
+                agenda.add(new Contacto("Manuel", "ManuelRD@gmail.com", 675456526));
 
-                    for (Contacto c : agenda) {
-                        bw.write(c.getNombre() + "," + c.getEmail() + "," + c.getTlf());
-                        bw.newLine();
-                    }
-                }
-                System.out.println("Se ha creado el fichero con contactos.");
+                guardarAgenda();
+                System.out.println("Archivo con contactos creado");
             } else {
-                System.out.println("Opción no válida. Escribe 'vacio' o 'contactos'.");
-                Crear(); // vuelve a preguntar
+                System.out.println("Opción no válida");
             }
         } catch (Exception e) {
-            System.out.println("Error al crear el archivo: " + e.getMessage());
+            System.out.println("Error al crear la agenda: " + e.getMessage());
         }
     }
 
-    
+    // Añadir contacto
+    public void Anhadir() {
+        try {
+            System.out.print("Nombre: ");
+            String nombre = sc.nextLine().trim();
+            System.out.print("Correo electrónico: ");
+            String email = sc.nextLine().trim();
+            System.out.print("Teléfono: ");
+            int tlf = Integer.parseInt(sc.nextLine());
 
-public void Anhadir(){
-   try {
-        System.out.println("Nombre: ");
-         String nombreN = sc.nextLine();
-
-        System.out.println("Correo electrónico: ");
-         String emailN = sc.nextLine();
-          if (!email.matches("^[\\w.-]+@[\\w.-]+\\.[A-Za-z]{2,6}$")) {
+            if (!email.matches("^[\\w.-]+@[\\w.-]+\\.[A-Za-z]{2,6}$")) {
                 System.out.println("Formato de email no válido.");
                 return;
             }
 
-        System.out.println("Númemro de telefono: ");
-        int tlfN = Integer.parseInt(sc.nextLine());
-
-        for(Contacto c: agenda){
-            if(c.getNombre().equalsIgnoreCase(nombreN)){
+            if (buscarPorNombre(nombre) != null) {
                 System.out.println("Este contacto ya existe");
                 return;
             }
+
+            agenda.add(new Contacto(nombre, email, tlf));
+            guardarAgenda();
+            System.out.println("Contacto añadido correctamente");
+        } catch (Exception e) {
+            System.out.println("Error al añadir contacto: " + e.getMessage());
         }
-        agenda.add(new Contacto(nombreN, emailN, tlfN));
-            System.out.println("Contacto añadido");
+    }
 
-   } catch (Exception e) {
-        System.out.println("Error al añadir contacto: " + e.getMessage());
+    // Consultar contacto
+    public void Consultar() {
+        System.out.print("Introduce el nombre del contacto a consultar: ");
+        String nombre = sc.nextLine();
+        Contacto c = buscarPorNombre(nombre);
+        if (c == null) {
+            System.out.println("No se encontró el contacto.");
+        } else {
+            System.out.println(c);
+        }
+    }
 
-   }
+    // Modificar contacto
+    public void Modificar() {
+        System.out.print("Introduce el nombre del contacto a modificar: ");
+        String nombre = sc.nextLine();
+        Contacto c = buscarPorNombre(nombre);
+        if (c == null) {
+            System.out.println("El contacto no existe.");
+            return;
+        }
+        System.out.println("Nombre nuevo: ");
+        String nNombre = sc.nextLine();
+        if (!nNombre.isBlank()) c.setNombre(nNombre);
+
+        System.out.println("Correo electrónico nuevo: ");
+        String nEmail = sc.nextLine();
+        if (!nEmail.isBlank()) c.setEmail(nEmail);
+
+        System.out.println("Teléfono nuevo: ");
+        String nTlf = sc.nextLine();
+        if (!nTlf.isBlank()) c.setTlf(Integer.parseInt(nTlf));
+
+        guardarAgenda();
+        System.out.println("Contacto modificado correctamente");
+    }
+
     
-}
+    public void Borrar() { // Borrado lógico
+        System.out.print("Introduce el nombre del contacto a borrar: ");
+        String nombre = sc.nextLine();
+        Contacto c = buscarPorNombre(nombre);
+        if (c == null) {
+            System.out.println("No existe ese contacto");
+            return;
+        }
+        c.setBorrado(true);
+        guardarAgenda();
+        System.out.println("Contacto borrado");
+    }
 
-public void Consultar(){
- if(agenda.isEmpty()){
-    System.out.println("La agenda está vacia");
-    return;
- }
- else{
-    System.out.println("Que contacto quieres consultar: ");
-    String consulta = sc.nextLine();
-    boolean encontrado ;
-        if(agenda.contains(consulta)){
+     public void Vaciar() { //Borrado físico
+        agenda.clear();
+        guardarAgenda();
+        System.out.println("Agenda vaciada");
+    }
+
+    // Restaurar contacto borrado
+    public void Restaurar() {
+        System.out.print("Introduce el nombre del contacto a restaurar: ");
+        String nombre = sc.nextLine();
+        Contacto c = buscarPorNombre(nombre);
+        if (c == null) {  //si el contacto es nulo
+            System.out.println("No se encontró el contacto.");
+            return;
+        }
+        if (!c.isBorrado()) { //si el contacto no está borrado
+            System.out.println("El contacto ya existe.");
+        } else {
+            c.setBorrado(false);
+            guardarAgenda();
+            System.out.println("Contacto restaurado correctamente.");
+        }
+    }
+
+    // Ver todos los contactos
+    public void Ver() {
+        if (agenda.isEmpty()) {
+            System.out.println("La agenda está vacía");
+            return;
+        }
+        int contador = 0;
+        for (Contacto c : agenda) {
+            System.out.println(c);
+            if (!c.isBorrado()) contador++; //suma cada que pase un contacto
+        }
+        System.out.println("La agenda contiene " + contador + " contactos.");
+    }
+
+    private void guardarAgenda() {
+        try (BufferedWriter bw = Files.newBufferedWriter(archivo, StandardCharsets.UTF_8)) {
             for (Contacto c : agenda) {
-                 if (c.getNombre().equalsIgnoreCase(consulta)) {
-                System.out.println(c);
-                encontrado = true;
-                break;
+                bw.write(c.getNombre() + "," + c.getEmail() + "," + c.getTlf() + "," + c.isBorrado());
+                bw.newLine();
             }
-            }
+        } catch (IOException e) {
+            System.out.println("Error al guardar la agenda: " + e.getMessage());
         }
- }
-}
-
-public void Modificar(){
-    System.out.println("Escribe el nombre para modificar el contacto: ");
-    nombre = sc.nextLine();
-    
-    if(! agenda.contains(contacto)){
-        System.out.println("El contacto a modificar no existe");
     }
-}
 
-public void Borrar(){
-    System.out.println("Qué contacto quieres borrar: ");
-    nombre= sc.nextLine();
-    if(agenda.contains(contacto)){
-
-        
-        System.out.println("Contacto eliminado");
-    } else {
-        System.out.println("El contacto no se encuentra en la agenda");
+    private void cargarAgenda() {
+        if (!Files.exists(archivo)) return;
+        try (BufferedReader br = Files.newBufferedReader(archivo, StandardCharsets.UTF_8)) {
+            String linea;
+            while ((linea = br.readLine()) != null) {
+                String[] datos = linea.split(",");
+                if (datos.length == 4) {
+                    Contacto c = new Contacto(datos[0], datos[1], Integer.parseInt(datos[2]));
+                    c.setBorrado(Boolean.parseBoolean(datos[3]));
+                    agenda.add(c);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error al cargar la agenda: " + e.getMessage());
+        }
     }
-}
 
 
-public void Restaurar(){
-
-}
-
-public void Ver(){
-    int contador = 0;
-    if(! agenda.contains(contacto)){
-        System.out.println("El contacto no está en la agenda");
-    } else {
-        System.out.println(agenda);
-        contador++;
+    public Contacto buscarPorNombre(String nombre) { //ahorro de código a la hora de búsqueda de contacto
+        for (Contacto c : agenda) {
+            if (c.getNombre().equalsIgnoreCase(nombre)) return c;
+        }
+        return null;
     }
-    System.out.println("La agenda contiene " + contador + "contactos.");
-}
-
-public void Vaciar(){
-    agenda.removeAll(agenda);
-    System.out.println("La agenda se ha vaciado");
-}
-
-public void MasOpciones(){
-    Menu2();
-    int opcion2 = 0;
-    String ruta = "D:\\ElenaGonzalez\\AD\\Practica\\Archivo.txt";
-
-    switch (opcion2) {
-        case 1: 
-                Path path = Path.of(ruta);
-                System.out.println("Ubicación: " + path.toAbsolutePath());
-                System.out.println("Tamaño del archivo: " + path.toFile().length() + " bytes");
-                System.out.println("Permisos: " + (path.toFile().canRead() ? "lectura " : "") +
-                                                  (path.toFile().canWrite() ? "escritura " : "") +
-                                                  (path.toFile().canExecute() ? "ejecución" : ""));
-                System.out.println("Última modificación: " + path.toFile().lastModified());
-                break;
-        case 2:
-            System.out.println("Copia de seguridad realizada correctamente");
-            break;
-        case 3:
+//Métodos del Menú 2
+    public void MasOpciones() {
+        int opcion;
+        do {
+            opcion = DameOpcion2();
+            switch (opcion) {
+                case 1 :
+                     mostrarInfoArchivo();
+                     break;
+                case 2:
+                    copiaSeguridad();
+                    break;
+                case 3 :
+                    restaurarCopia();
+                    break;
+                case 4 :
+                    System.out.println("Volviendo al Menú 1...");
+                    break;
+                default : 
+                    System.out.println("Opción no válida.");
+                    break;
+            }
+        } while (opcion != 4);
+    }
+    //Opción 1
+    private void mostrarInfoArchivo() {
+        try {
+            System.out.println("Ubicación: " + archivo.toAbsolutePath());
+            System.out.println("Tamaño: " + Files.size(archivo) + " bytes");
+            System.out.println("Permisos: lectura=" + Files.isReadable(archivo)
+                    + ", escritura=" + Files.isWritable(archivo));
+            System.out.println("Última modificación: " + new Date(Files.getLastModifiedTime(archivo).toMillis()));
+        } catch (IOException e) {
+            System.out.println("Error al obtener información: " + e.getMessage());
+        }
+    }
+    //Opción 2: Crea copia de seguridad
+    private void copiaSeguridad() {
+        try {
+            String fecha = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date()); //muestra fehca exacta
             
-            break;
-        case 4:
-            System.out.println("Saliendo del Menú 2...");
-            System.out.println();
-           
-            break;
-        default:
-              
+            Path copia = Path.of(archivo.getParent().toString(), "Copia_Seguridad_Agenda" + fecha + ".txt");
+         
+            Files.copy(archivo, copia, StandardCopyOption.REPLACE_EXISTING);
+         
+            System.out.println("Copia de seguridad creada: " + copia.getFileName());
+        } catch (IOException e) {
+            System.out.println("Error al crear copia de seguridad: " + e.getMessage());
+        }
     }
-}
+    //Opción 3: Lista de copias de seguridad y cuando se escoja 1, la restaura
+ private void restaurarCopia() {
+        try (DirectoryStream<Path> stream = Files.newDirectoryStream(archivo.getParent(), "Copia_Seguridad_Agenda*.txt")) {
+            List<Path> copias = new ArrayList<>();
+            int i = 1;
+            for (Path p : stream) {
+                System.out.println(i++ + ". " + p.getFileName());
+                copias.add(p); //añade el objeto p a copias
+            }
+            if (copias.isEmpty()) {
+                System.out.println("No hay copias disponibles.");
+                return;
+            }
+            System.out.print("Selecciona número de copia: ");
+            int sel = Integer.parseInt(sc.nextLine()); //número de copia
+            Files.copy(copias.get(sel - 1), archivo, StandardCopyOption.REPLACE_EXISTING); //si el archivo de destino ya existe se sobreescribe
+            cargarAgenda();
+            System.out.println("Agenda restaurada desde la copia seleccionada");
+        } catch (Exception e) {
+            System.out.println("Error al restaurar copia: " + e.getMessage());
+        }
+    }
 
-public void Salir(){
-    System.out.println("Saliendo...");
-    
-}
 
-    public void Menu1(){
-        System.out.println("    M E N U    ");
-        System.out.println("=================");
+
+    public void Menu1() {
+        System.out.println("\n");
+        System.out.println(" M E N Ú  1 ");
+        System.out.println("==============");
         System.out.println("1. Crear agenda");
         System.out.println("2. Añadir contacto");
         System.out.println("3. Consultar contacto");
@@ -204,45 +283,31 @@ public void Salir(){
         System.out.println("8. Vaciar agenda");
         System.out.println("9. Más opciones");
         System.out.println("10. Salir");
-        System.out.println("Dame opción: ");
-    
+        System.out.print("Elige una opción: ");
     }
 
-    public void Menu2(){
-         System.out.println("    M E N U 2    ");
-        System.out.println("===================");
-        System.out.println("1. Informarcion del archvio");
+    public void Menu2() {
+        System.out.println("\n");
+        System.out.println(" M E N Ú  2 ");
+        System.out.println("=============");
+        System.out.println("1. Mostrar información del archivo");
         System.out.println("2. Hacer copia de seguridad");
         System.out.println("3. Restaurar copia de seguridad");
         System.out.println("4. Volver");
-        System.out.println("Dame opción: ");
-
+        System.out.print("Elige una opción: ");
     }
 
     public int DameOpcion() {
         Menu1();
-        int opcion = sc.nextInt();
-        sc.nextLine(); 
-        return opcion;
+        int op = sc.nextInt();
+        sc.nextLine();
+        return op;
     }
 
     public int DameOpcion2() {
         Menu2();
-        int opcion2 = sc.nextInt();
+        int op = sc.nextInt();
         sc.nextLine();
-        return opcion2;
+        return op;
     }
-
-
-    public Contacto buscarPorNombre(String nombre) {
-        for (Contacto c : agenda) {
-            if (c.getNombre().equalsIgnoreCase(nombre)) {
-                return c;
-            }
-        }
-        return null;
-    }
-
 }
-
-

@@ -9,7 +9,7 @@ public class Practica {
         int num = 0;
     
             do {
-            System.out.println("Dame una opción: ");
+           
             num = agenda.DameOpcion();
 
             if (num > 0 && num < 11) {
@@ -41,6 +41,9 @@ public class Practica {
                     case 9:
                         agenda.MasOpciones();
                         break;
+                    case 10:
+                        System.out.println("Saliendo...");
+                        System.exit(0);
                     default:
                         agenda.Menu1();
                         break;
@@ -49,7 +52,7 @@ public class Practica {
                 System.out.println("Opción no válida");
             }
 
-        } while (num != 0); 
+        } while (num != 10); 
 
         sc.close();
     }

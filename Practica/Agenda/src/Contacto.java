@@ -46,5 +46,14 @@ public class Contacto implements Serializable {
     public void setBorrado(boolean borrado) {
       this.borrado = borrado;
     }     
+
+     @Override
+    public String toString() {
+        if (borrado) {
+            return "(BORRADO) Nombre: " + nombre + ", Email: " + email + ", Teléfono: " + tlf;
+        } else {
+            return "Nombre: " + nombre + ", Email: " + email + ", Teléfono: " + tlf;
+        }
+    }
    
 }
