@@ -1,8 +1,3 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Scanner;
 public class Ejercicio1 {
 
@@ -68,7 +63,7 @@ public static void main(String[] args) throws Exception {
 
 /*PROBA a: Usa try with resources para a conexión e o statement. 
 Con un solo Statement Obter 2 ResultSET (todos os actores e todas as peliculas, con LIMIT 5) 
-Despois imprime as tablas*/
+Despois imprime as tablas
         try(Connection conn = DriverManager.getConnection(url, user, password); 
             Statement stmt= conn.createStatement()){
 
@@ -91,8 +86,55 @@ Despois imprime as tablas*/
                     /*  rs.close();
                         stmt.close();
                         conn.close();
-                        */
+                        
             }
+                        */
+/* 
+            try(Connection conn = DriverManager.getConnection(url, user, password); 
+            Statement stmt= conn.createStatement()){
+
+            String query = "DELETE FROM film_actor WHERE actor_id = 2 AND film_id = 3;";
+
+           int rows = stmt.executeUpdate(query);
+           System.out.println("Se han modificado "+ rows + " filas");
+           
+          } catch (SQLException e){
+              e.printStackTrace();
         }
+              */
+
+    //Cambiar o first name ó actor con actor_id = 2
+    /*   try(Connection conn = DriverManager.getConnection(url, user, password); 
+            Statement stmt= conn.createStatement()){
+
+            String query = "UPDATE actor SET first_name = 'Paco' WHERE actor_id= 2;";
+
+           int rows = stmt.executeUpdate(query);
+           System.out.println("Se han modificado "+ rows + " filas");
+           
+          } catch (SQLException e){
+              e.printStackTrace();
+        }
+              */
+              /* 
+               try(Connection conn = DriverManager.getConnection(url, user, password); 
+            Statement stmt= conn.createStatement()){
+
+            String query = "INSERT INTO actor(first_name, last_name) VALUES('ELENA', 'GONZALEZ');";
+
+           int rows = stmt.executeUpdate(query);
+           System.out.println("Se han modificado "+ rows + " filas");
+           
+          } catch (SQLException e){
+              e.printStackTrace();
+        }
+*/
+
+//
+
+
+    }
 }
+
+
 
