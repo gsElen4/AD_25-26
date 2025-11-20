@@ -1,30 +1,31 @@
 
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Ej2Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, SQLException {
         Scanner sc = new Scanner(System.in);
         
         Ejercicio2 ej2 = new Ejercicio2();
         Menu menu = new Menu();
-        int num = 0;
+        int num;
         do { 
             num = menu.DameOpcion();
             if(num>0 && num<5){
                 switch (num) {
                     case 1:
-                        
+                        ej2.buscaActores();
                         break;
                     case 2:
-                        
-                    break;
+                        ej2.borraActores();
+                        break;
                     case 3:
-                        
+                        ej2.actualizaActores();
                         break;
                     case 4:
-                        
-                    break;
+                        ej2.insertaActores();
+                        break;
                     default:
                         menu.Menu();
                         break;
